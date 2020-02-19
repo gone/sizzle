@@ -1185,13 +1185,21 @@ if ( jQuery( "<fieldset disabled='disabled'/>" )[ 0 ].disabled ) {
 }
 
 QUnit.test( "pseudo - :target and :root", function( assert ) {
-	assert.expect( 2 );
+	assert.expect( 4 );
 
 	// Target
 	var oldHash,
 	$link = jQuery( "<a/>" ).attr( {
 		href: "#",
 		id: "new-link"
+	} ).appendTo( "#qunit-fixture" ),
+	$link_the_second = jQuery( "<a/>" ).attr( {
+		href: "#",
+		id: "second-new-link"
+	} ).appendTo( "#qunit-fixture" ),
+	$link_the_third = jQuery( "<a/>" ).attr( {
+		href: "#",
+		id: "third-new-link"
 	} ).appendTo( "#qunit-fixture" );
 
 	oldHash = window.location.hash;
@@ -1199,7 +1207,17 @@ QUnit.test( "pseudo - :target and :root", function( assert ) {
 
 	t( ":target", ":target", [ "new-link" ] );
 
+	window.location.hash = "second-new-link";
+
+	t( ":target", ":target", [ "second-new-link" ] );
+
+
+  window.history.pushState( null, null, "#third-new-link" );
+
+	t( ":target", ":target", [ "third-new-link" ] );
+
 	$link.remove();
+	$link_the_second.remove();
 	window.location.hash = oldHash;
 
 	// Root
